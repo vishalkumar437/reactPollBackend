@@ -27,7 +27,13 @@ const userSchema= new mongoose.Schema({
 
     profileUrl:{
         type:String,
+    },
+
+    name:{
+        type:String,
+        required:true,
     }
+
 
 
 })
