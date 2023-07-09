@@ -4,6 +4,10 @@ const mongo= require('mongoose');
 const bd=require('body-parser');
 const pollRoute = require("./routes/pollRoute")
 const userRoute= require("./routes/userRoute");
+const cors = require('cors');
+app.use(cors({
+    origin: '*'
+}));
 
 mongo.connect("mongodb+srv://ReactPoll:rM8H7VLryG4WylOR@cluster0.lpqrhm7.mongodb.net/?retryWrites=true&w=majority");
 

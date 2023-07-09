@@ -1,11 +1,12 @@
 const userModule = require("../schema/User");
 
 module.exports.userSignUpPost = (req, res) => {
+  const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
-  console.log(email,password);
+
   userModule
-    .create({ email: email, password: password })
+    .create({ name: name, email: email, password: password })
     .then((result) => {
       r = {
         msg: "user created",
@@ -14,8 +15,12 @@ module.exports.userSignUpPost = (req, res) => {
 
       res.status(201).send(r);
     })
-    .catch((result) => {
-      console.log(res);
+    .catch((error) => {
+      r = {
+        error: "Email Already Exist"
+      };
+
+      res.status(403).send(r);
     });
 };
 
@@ -30,13 +35,13 @@ module.exports.userLoginPost = (req, res) => {
       if (result.password === password) {
         res.status(200).send({
           id: result._id,
-          msg: "login success full",
+          msg: "login successfull",
           result,
         });
       }
       else{
         res.status(401).send({
-          msg: "Invalid Credentials",
+          error: "Invalid Credentials",
         });
       }
     })
