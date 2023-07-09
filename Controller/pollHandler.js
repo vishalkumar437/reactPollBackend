@@ -4,9 +4,9 @@ const poll = require("../schema/Poll");
 const mongo = require("mongoose");
 
 module.exports.create_poll = (req,res)=> {
-    let question = req.body.question;
-    let options = req.body.options;
-    let category = req.body.options;
+    let question = req.body.Question;
+    let options = req.body.Options;
+    let category = req.body.Category;
     let creator_Id = req.body.creatorId;
     const Poll = new poll({
         Question: question,
