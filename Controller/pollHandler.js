@@ -28,3 +28,48 @@ module.exports.create_poll = (req,res)=> {
         })
     });
 }
+
+module.exports.submit_poll = (req,res)=>{
+    let pollId = req.body.pollId;
+    let voter_id = req.body.voter_id;
+    let option = req.body.option;
+    
+    poll.findById(pollId)
+    .then(result=>{
+        let newCount =  result.Options[option].count+1;
+        
+        let newOptions=[...result.Options]
+        
+        newOptions[option].count=newCount;
+        
+        let newVoterId = [...result.voter_ids,voter_id]
+        console.log(newOptions)
+        console.log(newVoterId)
+        poll.updateOne({_id:pollId},{$set:{Options:newOptions,voter_ids:newVoterId}})
+        .then(result=>{
+            console.log("Poll Updated Successfully");
+            res.status(201).json({
+                newPoll: result
+            })
+        })
+        .catch(err=>{
+            console.log("Error Occured");
+            res.status(500).json({
+                error:err
+            })
+        });
+
+
+
+       
+
+    })
+
+    .catch(err=>{
+        console.log("PollId not found in the server");
+        res.status(500).json({
+            error:err
+        })
+    })
+
+}
