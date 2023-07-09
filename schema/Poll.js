@@ -6,7 +6,7 @@ const Poll = new mongoose.Schema({
     Options: { type : String , "default" : [] },
     Category: { type : String , "default" : [] },
     creatorId: mongoose.Schema.Types.ObjectId,
-    voter_id: { type: mongoose.Schema.Types.ObjectId, "default":[]}
+    voter_id: { type:[]}
 
 })
 
