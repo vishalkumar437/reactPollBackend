@@ -15,5 +15,15 @@ mongo.connection.on('connected',connected=>{
 });
 
 app.use(userRoute);
+app.use(bd.urlencoded({extended:false}));
+app.use(bd.json());
+app.use(createPoll);
+
+
+app.use((req,res,next)=>{
+    res.status(404).json({
+        msg: "Error Bad Request"
+    })
+})
 
 module.exports = app;
