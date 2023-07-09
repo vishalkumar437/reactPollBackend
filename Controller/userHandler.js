@@ -3,7 +3,7 @@ const userModule = require("../schema/User");
 module.exports.userSignUpPost = (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-
+  console.log(email,password);
   userModule
     .create({ email: email, password: password })
     .then((result) => {
