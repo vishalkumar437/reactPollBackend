@@ -22,6 +22,10 @@ const userSchema= new mongoose.Schema({
         type:String,
         required:true,  
         minLength:[4,"Password  minimum lenght should be 4"] 
+    },
+
+    profileUrl:{
+        type:String,
     }
 
 
