@@ -10,6 +10,7 @@ const userSchema= new mongoose.Schema({
     participatedPollIds:{
         type:Array,
     },
+    
     email:{
         
         type:String,

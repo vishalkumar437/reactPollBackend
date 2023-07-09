@@ -19,10 +19,25 @@ module.exports.userSignUpPost = (req, res) => {
     });
 };
 
-// module.exports.userLoginPost= (req,res)=>{
-//     const email=req.body.email;
-//     const password=req.body.password;
+module.exports.userLoginPost = (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
 
-//     userModule.findOne({email}).then( () )
-
-// }F
+  userModule
+    .findOne({ email })
+    .then((result) => {
+      if (result.password === password) {
+        res.status(200).send({
+          id: result._id,
+          msg: "login success full",
+          result,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(401).send({
+        msg: "invalid credintials",
+      });
+    });
+};
