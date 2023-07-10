@@ -1,9 +1,11 @@
 const userModule = require("../schema/User");
+const bcrypt = require("bcrypt")
 
 module.exports.userSignUpPost = (req, res) => {
+  bcrypt.hash(req.body.password, 10, function(err, hash){
   const name = req.body.name;
   const email = req.body.email;
-  const password = req.body.password;
+  const password = hash;
 
   userModule
     .create({ name: name, email: email, password: password })
@@ -23,7 +25,8 @@ module.exports.userSignUpPost = (req, res) => {
 
       res.status(403).send(r);
     });
-};
+}
+)};
 
 module.exports.userLoginPost = (req, res) => {
   const email = req.body.email;
@@ -33,18 +36,23 @@ module.exports.userLoginPost = (req, res) => {
     .findOne({ email })
     .then((result) => {
       console.log(result)
-      if (result.password === password) {
+
+      bcrypt.compare(password,result.password).then(c=>{
+        console.log(c);
         res.status(200).send({
           id: result._id,
           msg: "login successfull",
           result,
         });
-      }
-      else{
-        res.status(401).send({
-          error: "Invalid Credentials",
-        });
-      }
+    })
+    .catch(err=>{
+
+        console.log("Wrong Password");
+        res.status(500).json({
+            error : err
+        })
+    })
+
     })
     .catch((err) => {
       console.log(err);
