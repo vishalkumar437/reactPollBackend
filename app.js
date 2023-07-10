@@ -11,6 +11,7 @@ app.use(cors({
 
 mongo.connect("mongodb+srv://ReactPoll:rM8H7VLryG4WylOR@cluster0.lpqrhm7.mongodb.net/?retryWrites=true&w=majority");
 
+
 mongo.connection.on('error',err=>{
     console.log("Error connection failed!!");
 });
