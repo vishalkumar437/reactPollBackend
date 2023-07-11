@@ -5,10 +5,10 @@ const {isEmail}=require('validator');
 const userSchema= new mongoose.Schema({
 
     createdPollIds:{
-        type:Array,
+        type:[],
     },
     participatedPollIds:{
-        type:Array,
+        type:[],
     },
     
     email:{

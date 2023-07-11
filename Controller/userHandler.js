@@ -10,6 +10,7 @@ module.exports.userSignUpPost = (req, res) => {
   userModule
     .create({ name: name, email: email, password: password })
     .then((result) => {
+      console.log(result);
       r = {
         msg: "user created",
         result,
