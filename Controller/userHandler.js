@@ -34,7 +34,6 @@ module.exports.userLoginPost = (req, res) => {
   userModule
     .findOne({ email })
     .then((result) => {
-      console.log(result)
 
       bcrypt.compare(password,result.password).then(c=>{
         console.log(c);
