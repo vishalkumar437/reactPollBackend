@@ -17,7 +17,6 @@ module.exports.create_poll = (req,res)=> {
         creatorId:creatorId
     })
     
-
     //finding creator of poll and then saving poll's id in  creators createdpoll array
     //and saving Poll
      userModule
@@ -26,7 +25,6 @@ module.exports.create_poll = (req,res)=> {
         //creating poll
           Poll.save()
     .then(result=>{
-
         // after poll created take its id and attach to creator
         let newcreatedPollIds=[result._id.toString(),...user.createdPollIds]
         console.log(user._id.toString(),typeof(user._id));
@@ -67,6 +65,43 @@ module.exports.create_poll = (req,res)=> {
     })
   
 }
+// THis will be used to fetch all the polls or we can use it by modifying and fetch query polls by passing in find as object.
+module.exports.getAllPolls = (req,res) =>{
+    poll.find()
+    .then(result=>{
+        console.log("Fetched all polls");
+        res.status(201).json({
+            poll : result
+        })
+    })
+    .catch(err=>{
+        console.log("Error Occured");
+        res.status(500).json({
+            error : err
+        })
+    })
+}
+
+//this is use to fetch poll by id
+
+module.exports.getPoll = (req,res) =>{
+    const id = req.body.pid;
+    console.log(req.body.pid)
+    poll.findById(id)
+    .then(result =>{
+        console.log("Poll fetch Successfully",result);
+        res.status(201).json({
+            poll : result
+        })
+    })
+
+    .catch(err=>{
+        console.log("Error Occured");
+        res.status(500).json({
+            error : err
+        })
+    })
+}
 
 module.exports.submit_poll = (req,res)=>{
     let pollId = req.body.pollId;
@@ -97,11 +132,6 @@ module.exports.submit_poll = (req,res)=>{
                 error:err
             })
         });
-
-
-
-       
-
     })
 
     .catch(err=>{
