@@ -3,6 +3,7 @@ const router = express.Router();
 const poll = require("../schema/Poll");
 const userModule = require("../schema/User");
 const mongo = require("mongoose");
+const { receiveCategory } = require("./Categories");
 
 module.exports.create_poll = (req,res)=> {
     console.log("create poll route hit");
@@ -16,7 +17,7 @@ module.exports.create_poll = (req,res)=> {
         Category: category,
         creatorId:creatorId
     })
-    
+    console.log(Poll)
     //finding creator of poll and then saving poll's id in  creators createdpoll array
     //and saving Poll
      userModule
@@ -26,6 +27,7 @@ module.exports.create_poll = (req,res)=> {
           Poll.save()
     .then(result=>{
         // after poll created take its id and attach to creator
+        receiveCategory(Poll.Category);
         let newcreatedPollIds=[result._id.toString(),...user.createdPollIds]
         console.log(user._id.toString(),typeof(user._id));
         console.log("new creaters poll array is ",newcreatedPollIds);
