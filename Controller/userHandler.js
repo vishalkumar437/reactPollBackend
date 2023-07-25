@@ -37,16 +37,27 @@ module.exports.userLoginPost = (req, res) => {
     .then((result) => {
 
       bcrypt.compare(password,result.password).then(c=>{
-        console.log(c);
-        res.status(200).send({
-          id: result._id,
-          msg: "login successfull",
-          result,
-        });
+        
+        if(c==true){
+
+          res.status(200).send({
+            id: result._id,
+            msg: "login successfull",
+            result,
+          });
+
+        }
+        else{
+          console.log("Wrong Password");
+          res.status(502).json({
+            error : err
+        })
+        }
+        
     })
     .catch(err=>{
 
-        console.log("Wrong Password");
+        console.log("error logging in");
         res.status(500).json({
             error : err
         })
