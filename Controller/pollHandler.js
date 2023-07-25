@@ -67,7 +67,7 @@ module.exports.create_poll = (req,res)=> {
 }
 // THis will be used to fetch all the polls or we can use it by modifying and fetch query polls by passing in find as object.
 module.exports.getAllPolls = (req,res) =>{
-    poll.find()
+    poll.find().sort({_id:-1})
     .then(result=>{
         console.log("Fetched all polls");
         res.status(201).json({
