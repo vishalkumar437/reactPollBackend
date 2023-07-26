@@ -9,7 +9,9 @@ async function receiveCategory(category) {
   try {
     let mainCategoryName = category.MainCategory;
     let subCategories = category.SubCategories;
-
+    for(let i=0;i<subCategories.length;i++){
+      subCategories[i] = subCategories.toLowerCase();
+    }
     // Find the MainCategory in the database
     let mainCategory = await Categories.findOne({ "MainCategory.name": mainCategoryName }).exec();
     if (!mainCategory) {
@@ -62,4 +64,42 @@ async function receiveCategory(category) {
   }
 }
 
-module.exports = { receiveCategory };
+async function updateCategoryPollCount(category) {
+  let mainCategoryName = category.MainCategory;
+  let subCategories = category.SubCategories;
+
+  try {
+    // Find the category with the given name in the database
+    let mainCategoryDoc = await Categories.findOne({ "MainCategory.name": mainCategoryName });
+
+    if (mainCategoryDoc) {
+      // Category found, update the MainCategory's voteCount
+      mainCategoryDoc.MainCategory.voteCount += 1;
+      console.log("MainCategory voteCount:", mainCategoryDoc.MainCategory.voteCount);
+
+      // Loop through the SubCategories and update their voteCounts if found
+      for (const subCategory of subCategories) {
+        // Find the SubCategory in the database using its name
+        let subCategoryDoc = mainCategoryDoc.SubCategories.find(sub => sub.name === subCategory);
+        if (subCategoryDoc) {
+          // SubCategory found, update its voteCount
+          subCategoryDoc.voteCount += 1;
+          console.log(`SubCategory ${subCategory} voteCount:`, subCategoryDoc.voteCount);
+        } else {
+          console.log(`SubCategory ${subCategory} not found.`);
+        }
+      }
+
+      // Save the updated document back to the database
+      await mainCategoryDoc.save();
+      console.log("Database updated successfully.");
+    } else {
+      console.log("MainCategory not found.");
+    }
+  } catch (error) {
+    console.error("Error updating voteCounts:", error);
+  }
+}
+
+
+module.exports = { receiveCategory,updateCategoryPollCount };
