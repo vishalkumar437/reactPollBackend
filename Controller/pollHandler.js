@@ -3,7 +3,7 @@ const router = express.Router();
 const poll = require("../schema/Poll");
 const userModule = require("../schema/User");
 const mongo = require("mongoose");
-const { receiveCategory } = require("./Categories");
+const { receiveCategory,updateCategoryPollCount } = require("./Categories");
 
 module.exports.create_poll = (req,res)=> {
     console.log("create poll route hit");
@@ -130,6 +130,8 @@ module.exports.submit_poll = (req,res)=>{
             return;
         }
 
+
+        let category = result.Category;
         let newCount =  result.Options[option].count+1;
         
         let newOptions=[...result.Options]
@@ -141,6 +143,7 @@ module.exports.submit_poll = (req,res)=>{
         console.log(newVoterId)
         poll.updateOne({_id:pollId},{$set:{Options:newOptions,voter_ids:newVoterId}})
         .then(result=>{
+            updateCategoryPollCount(category);
             console.log("Poll Updated Successfully");
             res.status(201).json({
                 newPoll: result
