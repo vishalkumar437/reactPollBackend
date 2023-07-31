@@ -7,4 +7,5 @@ router.post("/submitPoll",submit_poll);
 router.post("/getPoll",getPoll);
 router.post("/getPolls",getAllPolls);
 
+
 module.exports = router;

@@ -7,6 +7,7 @@ const Poll = new mongoose.Schema({
     Category: {},
     creatorId: mongoose.Schema.Types.ObjectId,
     voter_ids: { type:[]},
+    createdAt : String,
 
 })
 

@@ -11,11 +11,13 @@ module.exports.create_poll = (req,res)=> {
     let options = req.body.Options;
     let category = req.body.Category;
     let creatorId = req.body.creatorId;
+    let  dateInMilliSeconds=Date.now().toString();
     const Poll = new poll({
         Question: question,
         Options: options,
         Category: category,
-        creatorId:creatorId
+        creatorId:creatorId,
+        createdAt : dateInMilliSeconds,
     })
     console.log(Poll)
     //finding creator of poll and then saving poll's id in  creators createdpoll array
@@ -87,8 +89,8 @@ module.exports.getAllPolls = (req,res) =>{
 //this is use to fetch poll by id
 
 module.exports.getPoll = (req,res) =>{
-    const id = req.body.pid;
-    console.log(req.body.pid)
+    const id = req.body.pollId;
+    console.log(req.body.pollId)
     poll.findById(id)
     .then(result =>{
         console.log("Poll fetch Successfully",result);
@@ -112,6 +114,22 @@ module.exports.submit_poll = (req,res)=>{
     
     poll.findById(pollId)
     .then(result=>{
+        const  voter_ids=result.voter_ids;
+        const allreadyVoted=voter_ids.find( (id)=>{
+            return id===voter_id;
+        })
+        console.log("poll data",result);
+        console.log("voter_id array",result.voter_ids);
+        console.log("current voter",voter_id);
+        console.log("allreadyVoted ",allreadyVoted);
+        if(allreadyVoted)
+        {
+            
+            console.log("user has already voted");
+            res.status(400).json({ error:"User already voted"});
+            return;
+        }
+
         let newCount =  result.Options[option].count+1;
         
         let newOptions=[...result.Options]
