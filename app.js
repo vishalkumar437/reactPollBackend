@@ -4,6 +4,7 @@ const mongo= require('mongoose');
 const bd=require('body-parser');
 const pollRoute = require("./routes/pollRoute")
 const userRoute= require("./routes/userRoute");
+const categoriesRoute = require("./routes/categoriesRoute");
 const cors = require('cors');
 app.use(cors({
     origin: '*'
@@ -26,6 +27,7 @@ app.use(bd.urlencoded({extended:false}));
 app.use(bd.json());
 app.use(pollRoute);
 app.use(userRoute);
+app.use(categoriesRoute);
 
 
 app.use((req,res,next)=>{
