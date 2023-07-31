@@ -4,14 +4,10 @@ const mongoose = require("mongoose");
 const Categories =require("../schema/category");
 
 
-
 async function receiveCategory(category) {
   try {
     let mainCategoryName = category.MainCategory;
     let subCategories = category.SubCategories;
-    for(let i=0;i<subCategories.length;i++){
-      subCategories[i] = subCategories.toLowerCase();
-    }
     // Find the MainCategory in the database
     let mainCategory = await Categories.findOne({ "MainCategory.name": mainCategoryName }).exec();
     if (!mainCategory) {
@@ -101,5 +97,19 @@ async function updateCategoryPollCount(category) {
   }
 }
 
+    async function getAllCategories(req,res){
+      Categories.find().sort({_id:-1})
+      .then(result=>{
+          res.status(201).json({
+              Categories : result
+          })
+      })
+      .catch(err=>{
+          console.log("Error Occured");
+          res.status(500).json({
+              error : err
+          })
+      })
+    }
 
-module.exports = { receiveCategory,updateCategoryPollCount };
+module.exports = { receiveCategory,updateCategoryPollCount,getAllCategories };
