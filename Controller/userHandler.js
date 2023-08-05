@@ -1,9 +1,21 @@
+const cloudnaryUpload = require("../middleware/cloudnaryUpload");
 const userModule = require("../schema/User");
 const bcrypt = require("bcrypt");
 
-module.exports.userSignUpPost = (req, res) => {
+
+
+module.exports.userSignUpPost =async (req, res) => {
+
+  console.log("uploaded file is",req.file);
+
+  const response= await cloudnaryUpload(req.file);
+
+  console.log("response from cloudnary",response);
+  const {public_id,secure_url}=response;
+  console.log(" Got public_id,secure_url  for mongo db",public_id," ",secure_url);
+
   if (req.body.password.length < 4) {
-    console.log("password length is", req.body.password);
+    console.log("password length is", req.body.password)
     res.status(401).send({ msg: "Password to short minimum 4 length" });
     return;
   }
@@ -19,6 +31,9 @@ module.exports.userSignUpPost = (req, res) => {
         email: email,
         password: password,
         createdAt: dateInMilliSeconds,
+        profileUrl : secure_url,
+        profileId : public_id, 
+
       })
       .then((result) => {
         console.log(result);

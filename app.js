@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const dotenv=require('dotenv');
 const mongo= require('mongoose');
 const bd=require('body-parser');
 const pollRoute = require("./routes/pollRoute")
@@ -9,10 +10,10 @@ const cors = require('cors');
 app.use(cors({
     origin: '*'
 }));
+dotenv.config();
 
-// mongo.connect("mongodb+srv://ReactPoll:rM8H7VLryG4WylOR@cluster0.lpqrhm7.mongodb.net/?retryWrites=true&w=majority");
-mongo.connect("mongodb+srv://sandip9028162859:akRGllC8ogrg0xRU@cluster0.mrlcme7.mongodb.net/?retryWrites=true&w=majority");
-
+// mongo.connect(process.env.DB_URL_VISHAL);
+mongo.connect(process.env.DB_URL_DASHRATH);
 
 mongo.connection.on('error',err=>{
     console.log("Error connection failed!!");
@@ -23,8 +24,8 @@ mongo.connection.on('connected',connected=>{
 });
 
 
-app.use(bd.urlencoded({extended:false}));
-app.use(bd.json());
+app.use(bd.urlencoded({extended:false,limit:"50mb"}));
+app.use(bd.json({limit:"50mb"}));
 app.use(pollRoute);
 app.use(userRoute);
 app.use(categoriesRoute);
